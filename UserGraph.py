@@ -3,6 +3,9 @@ import networkx as nx
 import statistics
 
 class DirectedGraph():
+    '''
+    Class for th ecreation of user/adress graphs.
+    '''
     def __init__(self, df):
         self.df = df
         self.G = None
@@ -15,6 +18,10 @@ class DirectedGraph():
         '''
         self.G = nx.from_pandas_edgelist(self.df, var_from, var_to, metadata, nx.DiGraph())
     def extract_variables(self):
+        '''
+        Function to iterate through the graph and extract values.
+        :return: list of values and user dataframe
+        '''
         lstin = []
         for u in self.G.nodes():
             in_etc = 0

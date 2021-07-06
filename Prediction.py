@@ -15,12 +15,20 @@ class Prediction():
         self.cm = None
 
     def make_prediction(self):
+        '''
+        Method to start the prediciton
+        '''
         self.pred = self.model.predict(self.test)
         diff = np.abs(self.pred - self.test)
         self.mse = np.mean(diff, axis=1)
         self.mse_avg = np.mean(self.mse, axis=1)
 
     def plot_avg_reconstruction_error(self, label_list, threshold_fixed = 0.3):
+        '''
+        Method to plot the avg. Reconstruction Error
+        :param label_list: list, of labels
+        :param threshold_fixed: int, value of threshold
+        '''
         error_df = pd.DataFrame({'Reconstruction_error': self.mse_avg, 'True_class': label_list})
         groups = error_df.groupby('True_class')
         fig, ax = plt.subplots()
@@ -36,6 +44,13 @@ class Prediction():
 
     def plot_error_one_feature(self,featurenum, collst,
                                label_list, threshold_fixed = 0.3):
+        '''
+        Helper-Method to plot one Feature.
+        :param featurenum: int, place of feature in list
+        :param collst: list, of column names
+        :param label_list: list, of labels
+        :param threshold_fixed: fixed value to set the Threshhold
+        '''
         error_df = pd.DataFrame({'Reconstruction_error': self.mse[:, featurenum],
                                  'True_class': label_list})
         groups = error_df.groupby('True_class')
@@ -52,10 +67,20 @@ class Prediction():
         plt.show();
 
     def plot_error_all_features(self, collst, label_list):
+        '''
+        Method to plot all features.
+        :param collst: List, of feature names
+        :param label_list: List, of labels to pass
+        '''
         for idx in list(range(0,len(collst))):
             self.plot_error_one_feature(idx, collst,label_list)
 
     def plot_pr_diagram(self, label_list, timestep):
+        '''
+        Method to plot PR-Diagram
+        :param label_list: List, of labels
+        :param timestep: int, timestep defined in model
+        '''
         error_df = pd.DataFrame({'Reconstruction_error': self.mse_avg,
                                  'True_class': label_list[timestep:]})
 
@@ -71,6 +96,13 @@ class Prediction():
         plt.show()
 
     def performance(self,trh, label_list, timestep):
+        '''
+
+        :param trh:
+        :param label_list:
+        :param timestep:
+        :return:
+        '''
         z_scores = self.mse_avg
         outliers = z_scores > trh
         outliers
